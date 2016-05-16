@@ -1,0 +1,43 @@
+{
+  "name": "Cell Tower Coverage",
+  "version": "0.1.1",
+  "description": "A starting point for new projects and atlas.utah.gov",
+  "homepage": "https://atlas.utah.gov",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate.git"
+  },
+  "keywords": [
+    "esri",
+    "arcgis",
+    "javascript",
+    "gis"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "dojo": "^1.10",
+    "grunt": "^0.4.0",
+    "grunt-bump": "^0.8.0",
+    "grunt-contrib-clean": "^1.0.0",
+    "grunt-contrib-compress": "^1.1.1",
+    "grunt-contrib-connect": "^1.0.2",
+    "grunt-contrib-copy": "^1.0.0",
+    "grunt-contrib-imagemin": "^1.0.0",
+    "grunt-contrib-jasmine": "^1.0.0",
+    "grunt-contrib-stylus": "^1.0.0",
+    "grunt-contrib-watch": "^1.0.0",
+    "grunt-dojo": "^1",
+    "grunt-eslint": "^18.1.0",
+    "grunt-newer": "^1.1.2",
+    "grunt-parallel": "^0.4.1",
+    "grunt-processhtml": "^0.3.13",
+    "grunt-saucelabs": "^8",
+    "grunt-ssh": "^0",
+    "grunt-verbosity": "^0.2.2",
+    "load-grunt-tasks": "^3",
+    "uglify-js": "^2.6.2"
+  },
+  "scripts": {
+    "test": "grunt travis -v"
+  }
+}
