@@ -1,11 +1,11 @@
 {
-  "name": "Cell Tower Coverage",
+  "name": "cell-tower-coverage",
   "version": "0.1.1",
-  "description": "A starting point for new projects and atlas.utah.gov",
-  "homepage": "https://atlas.utah.gov",
+  "description": "Application to view cell tower coverage areas",
+  "homepage": "",
   "repository": {
     "type": "git",
-    "url": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate.git"
+    "url": "https://github.com/agrc/cell-tower-coverage.git"
   },
   "keywords": [
     "esri",

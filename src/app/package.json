@@ -2,7 +2,7 @@
     "name": "CellTowerCoverage.app",
     "version": "0.1.1",
     "main": "main",
-    "description": "AGRC Boilerplate",
-    "homepage": "https://github.com/agrc/AGRCJavaScriptProjectBoilerPlate",
+    "description": "Application to view cell tower coverage areas",
+    "homepage": "https://github.com/agrc/cell-tower-coverage.git",
     "dojoBuild": "app.profile.js"
 }

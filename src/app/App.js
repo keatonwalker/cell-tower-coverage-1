@@ -1,6 +1,4 @@
 define([
-    'agrc/widgets/locate/FindAddress',
-    'agrc/widgets/locate/MagicZoom',
     'agrc/widgets/map/BaseMap',
 
     'app/config',
@@ -26,8 +24,6 @@ define([
 
     'layer-selector'
 ], function (
-    FindAddress,
-    MagicZoom,
     BaseMap,
 
     config,
@@ -107,8 +103,6 @@ define([
             // summary:
             //      Fires when
             console.log('app.App::setupConnections', arguments);
-
-            on.once(this.egg, 'dblclick', lang.hitch(this, 'showLevel'));
         },
         startup: function () {
             // summary:
@@ -123,24 +117,6 @@ define([
             });
 
             this.inherited(arguments);
-        },
-        showLevel: function () {
-            // summary:
-            //      shows the current map level
-            console.log('app.App::showLevel', arguments);
-
-            var parent = this.egg.parentNode;
-
-            var node = document.createElement('span');
-            node.setAttribute('class', 'version');
-            node.setAttribute('style', 'padding-right:15px;margin-left:-43px;');
-            node.innerHTML = 'level: ' + this.map.getLevel() + ' ';
-
-            parent.insertBefore(node, this.egg.nextSibling);
-
-            this.map.on('extent-change', function _showLevel(changeEvt) {
-                node.innerHTML = 'level: ' + changeEvt.lod.level + ' ';
-            });
         },
         initMap: function () {
             // summary:

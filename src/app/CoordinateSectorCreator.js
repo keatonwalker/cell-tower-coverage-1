@@ -63,14 +63,19 @@ define([
         // summary:
         //      the cache level to zoom the map to
         zoomLevel: 13,
-
+        // symbol: esri/symbols/SimpleFillSymbol
+        // summary:
+        //      symbol used to display coverage graphicsLayer
+        symbol: null,
+        // graphicsLayer: esri/layers/GraphicsLayer
+        // summary:
+        //      GraphicsLayer used to display coverage areas
+        graphicsLayer: null,
         // Properties to be sent into constructor
         // map: esri/map
         // summary:
         //      the map to zoom
         map: null,
-        symbol: null,
-        graphicsLayer: null,
 
         postCreate: function () {
             // summary:
@@ -112,12 +117,17 @@ define([
 
             this.inherited(arguments);
         },
+        clear: function (){
+            // summary:
+            //      clears all coverage area graphics from the map
+            this.graphicsLayer.clear();
+
+        },
         zoom: function () {
             // summary:
             //      zooms the map to the point created by _getCoverageParams
             //  summary:
-            //      the point created by the user input or returned by
-            //      the geometry service
+            //      the point created by the user input
             console.log('agrc.widgets.locate.ZoomToCoords::zoom', arguments);
             console.log(this.map.spatialReference.wkid);
 
@@ -138,11 +148,11 @@ define([
             //Create coverage area polygon and add it to the graphics layer
             var polygonJson = {
                 'rings': [this._createCircleSector(
-                  point.x,
-                  point.y,
-                  coverageParams.beamWidth,
-                  coverageParams.azimuth,
-                  coverageParams.range
+                    point.x,
+                    point.y,
+                    coverageParams.beamWidth,
+                    coverageParams.azimuth,
+                    coverageParams.range
                 )],
                 'spatialReference': { 'wkid': 4326 }
             };
