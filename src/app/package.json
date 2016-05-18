@@ -1,6 +1,6 @@
 {
     "name": "CellTowerCoverage.app",
-    "version": "0.1.1",
+    "version": "1.0.0",
     "main": "main",
     "description": "Application to view cell tower coverage areas",
     "homepage": "https://github.com/agrc/cell-tower-coverage.git",
