@@ -21,6 +21,8 @@ define([
     'esri/geometry/Polygon',
     'esri/geometry/Circle',
     'esri/symbols/SimpleFillSymbol',
+    'esri/symbols/SimpleLineSymbol',
+    'esri/Color',
     'esri/graphic',
     'esri/layers/GraphicsLayer'
 ], function (
@@ -46,6 +48,8 @@ define([
     Polygon,
     Circle,
     SimpleFillSymbol,
+    SimpleLineSymbol,
+    Color,
     Graphic,
     GraphicsLayer
 ) {
@@ -84,15 +88,15 @@ define([
             if (!this.map) {
                 throw 'This widget requires an esri/map to be useful.';
             }
-            this.symbol = new SimpleFillSymbol().setColor(null).outline.setColor('red');
+            this.symbol = new SimpleFillSymbol(SimpleFillSymbol.STYLE_NULL,
+              new SimpleLineSymbol(SimpleLineSymbol.STYLE_SOLID,
+              new Color([255,255,0]), 4),new Color([255,255,0,0.25])
+            );
             this.graphicsLayer = new GraphicsLayer({ id: 'sectors' });
             this.map.addLayer(this.graphicsLayer);
 
             this._panelController = {
                 panels: {
-                    // utm: this.utmNode,
-                    // dm: this.dmNode,
-                    // dms: this.dmsNode,
                     dd: this.ddNode
                 },
                 hideAllBut: function (showMe) {
@@ -117,31 +121,27 @@ define([
 
             this.inherited(arguments);
         },
-        clear: function (){
+        clear: function () {
             // summary:
             //      clears all coverage area graphics from the map
             this.graphicsLayer.clear();
 
+            return;
         },
-        zoom: function () {
+        createSector: function () {
             // summary:
-            //      zooms the map to the point created by _getCoverageParams
-            //  summary:
-            //      the point created by the user input
-            console.log('agrc.widgets.locate.ZoomToCoords::zoom', arguments);
-            console.log(this.map.spatialReference.wkid);
+            //      creates a cirlce sector and zooms center point created by _getCoverageParams
+            console.log('app.CoordinateSectorCreator::createSector', arguments);
 
             if (!this.map) {
                 throw 'This widget requires an esri/map to be useful.';
             }
 
-            // disable zoom button
-            domClass.add(this.zoomNode, 'disabled');
-            domAttr.set(this.zoomNode, 'disabled', true);
+            // disable create button
+            domClass.add(this.createNode, 'disabled');
+            domAttr.set(this.createNode, 'disabled', true);
 
-            // reset errors
-            //domClass.remove(this.errorNode, ['alert', 'alert-danger', 'text-center']);
-            //this.errorNode.innerHTML = '';
+            //Get user supplied coverage parameters
             var coverageParams = this._getCoverageParams();
             var point = coverageParams.center;
 
@@ -156,7 +156,6 @@ define([
                 )],
                 'spatialReference': { 'wkid': 4326 }
             };
-            console.log(polygonJson);
             var sectorPolygon = webMercatorUtils.geographicToWebMercator(new Polygon(polygonJson));
             sectorPolygon.setSpatialReference(new SpatialReference({wkid: 3857}));//set spatialReference to web map Web mercator wkid
             var graphic = new Graphic(sectorPolygon, this.symbol);
@@ -167,16 +166,15 @@ define([
             var p = webMercatorUtils.geographicToWebMercator(point);
             p.setSpatialReference(new SpatialReference({wkid: 3857}));
             this.map.centerAndZoom(p, this.zoomLevel);
-            console.log('center and zoom');
-            this.emit('zoom', {
+            this.emit('create', {
                 bubbles: true,
                 cancelable: true,
                 point: point
             });
 
-            // enable zoom button
-            domClass.remove(this.zoomNode, 'disabled');
-            domAttr.remove(this.zoomNode, 'disabled');
+            // enable create button
+            domClass.remove(this.createNode, 'disabled');
+            domAttr.remove(this.createNode, 'disabled');
 
             return;
         },
@@ -192,7 +190,7 @@ define([
                 })
             );
 
-            this.watch('valid', lang.hitch(this, '_enableZoom'));
+            this.watch('valid', lang.hitch(this, '_enableCreateSector'));
             aspect.after(this, '_updateView', lang.hitch(this, '_validate'));
         },
         _updateView: function (evt) {
@@ -203,22 +201,24 @@ define([
 
             this._panelController.hideAllBut(evt.target.value);
         },
-        _enableZoom: function (prop, old, value) {
+        _enableCreateSector: function (prop, old, value) {
             // summary:
-            //      if validate returns true, enable the zoom button
-            console.log('app.CoordinateSectorCreator::_enableZoom', arguments);
+            //      if validate returns true, enable the create button
+            console.log('app.CoordinateSectorCreator::_enableCreate', arguments);
 
             if (!value) {
-                domClass.add(this.zoomNode, 'disabled');
-                domAttr.set(this.zoomNode, 'disabled', true);
+                domClass.add(this.createNode, 'disabled');
+                domAttr.set(this.createNode, 'disabled', true);
 
                 return;
             }
 
-            domClass.remove(this.zoomNode, 'disabled');
-            domAttr.remove(this.zoomNode, 'disabled');
+            domClass.remove(this.createNode, 'disabled');
+            domAttr.remove(this.createNode, 'disabled');
         },
         _getCoverageParams: function () {
+          // summary:
+          //      Get center point, range and angle inputs to create coverage area
             var getValue = function (input, match) {
                 var value = array.filter(input, function (node) {
                     return node.name === match;
@@ -226,6 +226,7 @@ define([
 
                 return number.parse(value);
             };
+
             var inputs = query('[data-required="true"]', this._panelController.visible);
             var sr = new SpatialReference({
                 wkid: 4326
@@ -233,28 +234,11 @@ define([
             var point = null;
             var x = null;
             var y = null;
-            // var xm = null;
-            // var ym = null;
-            // var xs = null;
-            // var ys = null;
             var beamWidth = null;
             var azimuth = null;
             var range = null;
 
-            console.log(inputs);
-
-            switch (this._panelController.visible) {
-                // case this.utmNode:
-                //     sr = new SpatialReference({
-                //         wkid: 26912
-                //     });
-                //
-                //     x = getValue(inputs, 'x');
-                //     y = getValue(inputs, 'y');
-                //
-                //     point = new Point(x, y, sr);
-                //
-                //     break;
+            switch (this._panelController.visible) {//switch allows for other coordinate nodes in the future
                 case this.ddNode:
                     x = getValue(inputs, 'x');
                     y = getValue(inputs, 'y');
@@ -265,41 +249,21 @@ define([
                     point = new Point(-x, y, sr);
 
                     break;
-                // case this.dmNode:
-                //     x = getValue(inputs, 'x');
-                //     y = getValue(inputs, 'y');
-                //     xm = getValue(inputs, 'xm') / 60;
-                //     ym = getValue(inputs, 'ym') / 60;
-                //
-                //     point = new Point(-(x + xm), y + ym, sr);
-                //
-                //     break;
-                // case this.dmsNode:
-                //     x = getValue(inputs, 'x');
-                //     y = getValue(inputs, 'y');
-                //     xm = getValue(inputs, 'xm') / 60;
-                //     ym = getValue(inputs, 'ym') / 60;
-                //     xs = getValue(inputs, 'xs') / 3600;
-                //     ys = getValue(inputs, 'ys') / 3600;
-                //
-                //     point = new Point(-(x + xm + xs), (y + ym + ys), sr);
-                //
-                //     break;
             }
 
-            //point = new Point(-111.6586, 40.2297, sr);
             var coverageParams = {
                 'center': point,
                 'beamWidth': beamWidth,
                 'azimuth': azimuth,
                 'range': range
-            }
+            };
+
             return coverageParams;
         },
         _validate: function () {
             // summary:
             //      validates the inputs from the node
-            console.log('agrc.widgets.locate.ZoomToCoords::_validate', arguments);
+            console.log('app.CoordinateSectorCreator::_validate', arguments);
 
             var valid = false;
             var inputs = query('[data-required="true"]', this._panelController.visible);
