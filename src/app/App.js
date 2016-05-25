@@ -1,5 +1,6 @@
 define([
     'agrc/widgets/map/BaseMap',
+    'agrc/widgets/layer/OpacitySlider',
 
     'app/config',
     'app/CoordinateSectorCreator',
@@ -19,12 +20,14 @@ define([
 
     'esri/dijit/Print',
     'esri/geometry/Extent',
+    'esri/layers/ArcGISDynamicMapServiceLayer',
 
     'ijit/widgets/layout/SideBarToggler',
 
     'layer-selector'
 ], function (
     BaseMap,
+    OpacitySlider,
 
     config,
     CoordinateSectorCreator,
@@ -44,6 +47,7 @@ define([
 
     Print,
     Extent,
+    ArcGISDynamicMapServiceLayer,
 
     SideBarToggler,
 
@@ -61,6 +65,9 @@ define([
         //      container for holding custom child widgets
         childWidgets: null,
 
+        //psapId
+        //    layer ID for psap boundaries
+        psapId: 'PsapBoundaries',
         // map: agrc.widgets.map.Basemap
         map: null,
 
@@ -78,7 +85,6 @@ define([
             // summary:
             //      Fires when
             console.log('app.App::postCreate', arguments);
-
             // set version number
             this.version.innerHTML = config.version;
 
@@ -92,7 +98,11 @@ define([
                 }, this.sidebarToggle),
                 new CoordinateSectorCreator({
                     map: this.map
-                }, this.coordinateNode)
+                }, this.coordinateNode),
+                new OpacitySlider({
+                    mapServiceLayer: this.map.getLayer(this.psapId),
+                    displayLegend: false
+                }, this.sliderNode)
             );
 
             this.inherited(arguments);
@@ -144,6 +154,14 @@ define([
                     baseLayers: ['Hybrid', 'Lite', 'Terrain', 'Topo', 'Color IR']
                 })
             );
+            var urlPsap = config.urls.psap;
+            var psapBoundaries = new ArcGISDynamicMapServiceLayer(urlPsap, {
+                id: this.psapId,
+                opacity: 0.75
+            });
+
+            this.map.addLayer(psapBoundaries);
+
         }
     });
 });

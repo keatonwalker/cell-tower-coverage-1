@@ -30,7 +30,11 @@ define([
 
         // apiKey: String
         //      The api key used for services on api.mapserv.utah.gov
-        apiKey: '' // acquire at developer.mapserv.utah.gov
+        apiKey: '', // acquire at developer.mapserv.utah.gov
+//window.location.hostname
+        urls: {
+            psap: window.location.protocol + '//' + window.location.hostname + '/arcgis/rest/services/CellTowerCoverage/MapServer'
+        }
     };
 
     if (has('agrc-build') === 'prod') {

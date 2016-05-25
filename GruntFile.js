@@ -69,7 +69,7 @@ module.exports = function (grunt) {
         '!stubmodule/**',
         '!util/**'
     ];
-    var deployDir = 'celltowercoverage';
+    var deployDir = 'CellTowerCoverage';
     var secrets;
     var sauceConfig = {
         urls: ['http://127.0.0.1:8000/_SpecRunner.html?catch=false'],
