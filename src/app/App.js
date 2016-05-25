@@ -20,7 +20,7 @@ define([
 
     'esri/dijit/Print',
     'esri/geometry/Extent',
-    'esri/layers/ArcGISDynamicMapServiceLayer',
+    'esri/layers/FeatureLayer',
 
     'ijit/widgets/layout/SideBarToggler',
 
@@ -47,7 +47,7 @@ define([
 
     Print,
     Extent,
-    ArcGISDynamicMapServiceLayer,
+    FeatureLayer,
 
     SideBarToggler,
 
@@ -155,7 +155,7 @@ define([
                 })
             );
             var urlPsap = config.urls.psap;
-            var psapBoundaries = new ArcGISDynamicMapServiceLayer(urlPsap, {
+            var psapBoundaries = new FeatureLayer(urlPsap, {
                 id: this.psapId,
                 opacity: 0.75
             });

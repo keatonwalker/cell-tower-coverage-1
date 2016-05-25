@@ -33,7 +33,7 @@ define([
         apiKey: '', // acquire at developer.mapserv.utah.gov
 //window.location.hostname
         urls: {
-            psap: window.location.protocol + '//' + window.location.hostname + '/arcgis/rest/services/CellTowerCoverage/MapServer'
+            psap: '/arcgis/rest/services/CellTowerCoverage/MapServer/0'
         }
     };
 
