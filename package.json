@@ -1,6 +1,6 @@
 {
   "name": "cell-tower-coverage",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Application to view cell tower coverage areas",
   "homepage": "mapserv.utah.gov/celltowercoverage",
   "repository": {
