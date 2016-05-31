@@ -1,0 +1,23 @@
+<div>
+    <div class='title-container'>
+        <h1>
+            <span class='title'>Cell Tower Coverage</span>
+            <a data-dojo-attach-point='version' class='version' href='ChangeLog.html'></a>
+        </h1>
+        <img src="app/resources/agrc_logo.jpg" alt="agrc logo">
+    </div>
+    <div data-dojo-attach-point='sideBar'
+        class='side-bar-container container-with-border'>
+        <div class="side-bar-padder"> <!-- required for side bar toggle widget -->
+            <h4>PSAP Boundaries</h4>
+            <div data-dojo-attach-point="sliderNode"></div>
+            <h4>Create Coverage Area</h4>
+            <div data-dojo-attach-point='coordinateNode'></div>
+        </div>
+    </div>
+    <div data-dojo-attach-point='centerContainer'
+        class='center-container container-with-border'>
+        <div data-dojo-attach-point='sidebarToggle'></div>
+        <div data-dojo-attach-point='mapDiv'></div>
+    </div>
+</div>
