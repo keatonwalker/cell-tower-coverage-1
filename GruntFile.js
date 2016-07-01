@@ -255,7 +255,7 @@ module.exports = function (grunt) {
                 }
             },
             options: {
-                createDirectories: true,
+                createDirectories: false,
                 path: './wwwroot/' + deployDir + '/',
                 srcBasePath: 'deploy/',
                 showProgress: true

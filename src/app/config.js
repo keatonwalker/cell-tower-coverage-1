@@ -40,11 +40,11 @@ define([
     if (has('agrc-build') === 'prod') {
         // atlas.utah.gov
         window.AGRC.apiKey = 'AGRC-A94B063C533889';
-        window.AGRC.quadWord = 'career-exhibit-panel-stadium';
+        window.AGRC.quadWord = 'alfred-plaster-crystal-dexter';
     } else if (has('agrc-build') === 'stage') {
         // test.mapserv.utah.gov
-        window.AGRC.quadWord = '';
         window.AGRC.apiKey = 'AGRC-AC122FA9671436';
+        window.AGRC.quadWord = 'opera-event-little-pinball';
     } else {
         // localhost
         xhr(require.baseUrl + 'secrets.json', {
